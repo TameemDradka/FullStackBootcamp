@@ -11,9 +11,23 @@
         <%- include("partials/header.ejs") %>
 
         <main>
-            
+            <div class="container">
+                <form action="/confirmEdit/<%= post.slug %>" method="POST">
+                    <div class="mb-3">
+                        <label for="editBlogTitle" class="form-label">Blog Title</label>
+                        <input type="text" class="form-control" id="editBlogTitle" name="title" value="<%= post.title %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="editBlogContent" class="form-label">Blog Content</label>
+                        <textarea class="form-control" id="editBlogContent" name="content" rows="10"><%- post.content %></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Edit</button>
+                </form>
+            </div>
         </main>
 
         <%- include("partials/footer.ejs") %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+
     </body>
 </html>
