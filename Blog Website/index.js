@@ -21,7 +21,17 @@ app.get("/posts/:slug", (req, res) => {
 });
 
 app.get("/edit", (req, res) => {
-  res.render("edit.ejs");
+  res.render("editMain.ejs", { posts });
+});
+
+app.get("/edit/:slug", (req, res) => {
+    const requestedSlug = req.params.slug;
+    const post = posts.find((p) => p.slug === requestedSlug);
+    if (post) {
+      res.render("editBlog.ejs", { post });
+    } else {
+      res.status(404).send("Post not found");
+    }
 });
 
 app.get("/create", (req, res) => {
