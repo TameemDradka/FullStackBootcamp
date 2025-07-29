@@ -10,6 +10,16 @@ app.get("/", (req, res) => {
     res.render("home.ejs", { posts });
 });
 
+app.get("/posts/:slug", (req, res) => {
+    const requestedSlug = req.params.slug;
+    const post = posts.find(p => p.slug === requestedSlug);
+    if (post) {
+        res.render("blog.ejs", { post });
+    } else {
+        res.status(404).send("Post not found");
+    }
+});
+
 app.get("/edit", (req, res) => {
   res.render("edit.ejs");
 });
