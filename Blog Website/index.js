@@ -56,6 +56,18 @@ app.get("/create", (req, res) => {
   res.render("create.ejs");
 });
 
+app.post("/confirmCreate", (req, res) => {
+    const newTitle = req.body.title;
+    const newContent = req.body.content;
+
+    const slug = newTitle.toLowerCase().trim().replace(/[^\w\s-]/g, "").replace(/\s+/g, "-"); 
+
+    const newPost = { title: newTitle, slug: slug, content: newContent};
+    posts.push(newPost);
+
+    res.redirect(`/posts/${slug}`);
+});
+
 app.get("/about", (req, res) => {
   res.render("about.ejs");
 });

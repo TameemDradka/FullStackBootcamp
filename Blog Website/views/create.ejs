@@ -11,7 +11,19 @@
         <%- include("partials/header.ejs") %>
 
         <main>
-            
+            <div class="container">
+                <form action="/confirmCreate" method="POST">
+                    <div class="mb-3">
+                        <label for="newBlogTitle" class="form-label">Enter New Blog Title</label>
+                        <input type="text" class="form-control" id="newBlogTitle" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newBlogContent" class="form-label">Enter New Blog Content (in HTML)</label>
+                        <textarea class="form-control" id="newBlogContent" name="content" rows="10"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Creation</button>
+                </form>
+            </div>
         </main>
 
         <%- include("partials/footer.ejs") %>
