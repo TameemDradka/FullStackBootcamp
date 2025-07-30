@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <%- include("partials/links.ejs") %>
+        <title>Create Blog</title>
+    </head>
+
+    <body>
+        <%- include("partials/header.ejs") %>
+
+        <main>
+            <div class="container">
+                <form action="/confirmCreate" method="POST">
+                    <div class="mb-3">
+                        <label for="newBlogTitle" class="form-label">Enter New Blog Title</label>
+                        <input type="text" class="form-control" id="newBlogTitle" name="title">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newBlogContent" class="form-label">Enter New Blog Content (in HTML)</label>
+                        <textarea class="form-control" id="newBlogContent" name="content" rows="10"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm Creation</button>
+                </form>
+            </div>
+        </main>
+
+        <%- include("partials/footer.ejs") %>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+        
+    </body>
+</html>
