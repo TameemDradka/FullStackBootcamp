@@ -8,20 +8,131 @@ const masterKey = "4VGP2DN-6EWM4SJ-N6FGRHV-Z3PR3TT";
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //1. GET a random joke
+app.get("/random", (req, res) => {
+  if (jokes.length === 0) {
+    return res.status(404).json({ error: "No jokes available." });
+  }
+
+  res.send(jokes[Math.floor(Math.random() * jokes.length)]);
+});
 
 //2. GET a specific joke
+app.get("/jokes/:id", (req, res) => {
+  const jokeId = parseInt(req.params.id);
+  const joke = jokes.find((j) => j.id === jokeId);
+
+  if (!joke) {
+    return res.status(404).json({ error: "Joke not found." });
+  }
+
+  res.json(joke);
+});
 
 //3. GET a jokes by filtering on the joke type
+app.get("/filter", (req, res) => {
+  if (!req.query.type) {
+    return res.status(400).json({ error: "Missing 'type' query parameter." });
+  }
+
+  let typeJokes = [];
+  jokes.forEach(joke => {
+    if (joke.jokeType.toLowerCase() === req.query.type) {
+      typeJokes.push(joke);
+    }
+  });
+
+  res.send(typeJokes);
+});
 
 //4. POST a new joke
+app.post("/jokes", (req, res) => {
+  if (!req.body.text || !req.body.type) {
+    return res.status(400).json({ error: "Missing 'text' or 'type' field." });
+  }
+
+  let newJoke = {
+    id: jokes[jokes.length - 1].id + 1,
+    jokeText: req.body.text,
+    jokeType: req.body.type
+  };
+
+  jokes.push(newJoke);
+  res.send(jokes[jokes.length - 1]);
+});
 
 //5. PUT a joke
+app.put("/jokes/:id", (req, res) => {
+  if (!req.body.text || !req.body.type) {
+    return res.status(400).json({ error: "Missing 'text' or 'type' field." });
+  }
+
+  const jokeId = parseInt(req.params.id);
+  let updatedJoke = {
+    id: jokeId,
+    jokeText: req.body.text,
+    jokeType: req.body.type,
+  };
+
+  const index = jokes.findIndex((j) => j.id === jokeId);
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Joke not found." });
+  }
+
+  jokes[index] = updatedJoke;
+  res.json(updatedJoke);
+});
 
 //6. PATCH a joke
+app.patch("/jokes/:id", (req, res) => {
+  const jokeId = parseInt(req.params.id);
+  const index = jokes.findIndex((j) => j.id === jokeId);
 
-//7. DELETE Specific joke
+  if (index === -1) {
+    return res.status(404).json({ error: "Joke not found." });
+  }
+
+  if (req.body.text) {
+    jokes[index].jokeText = req.body.text;
+  }
+  
+  if (req.body.type) {
+    jokes[index].jokeType = req.body.type;
+  }
+
+  res.send(jokes[index]);
+});
 
 //8. DELETE All jokes
+app.delete("/jokes/all", (req, res) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ error: "Missing or invalid authorization header" })
+  }
+
+  const token = authHeader.split(" ")[1];
+
+  if (token !== masterKey) {
+    return res.status(403).json({ error: "Forbidden. Invalid master key." });
+  }
+
+  jokes.length = 0;
+  res.json({ message: "All jokes deleted" });
+});
+
+//7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const index = jokes.findIndex((j) => j.id === parseInt(req.params.id));
+
+  if (index === -1) {
+    return res.status(404).json({ error: "Joke not found." });
+  }
+
+  jokes.splice(index, 1);
+  res.json("OK");
+});
+
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
