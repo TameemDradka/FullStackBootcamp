@@ -41,14 +41,57 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //Write your code here//
 
 //CHALLENGE 1: GET All posts
+app.get("/posts", (req, res) => {
+  res.json(posts);
+});
 
 //CHALLENGE 2: GET a specific post by id
+app.get("/posts/:id", (req, res) => {
+  res.json(posts.find((j) => j.id === parseInt(req.params.id)));
+});
 
 //CHALLENGE 3: POST a new post
+app.post("/posts", (req,res) => {
+  const now = new Date();
+  const isoString = now.toISOString();
+
+  posts.push({
+    id: posts[posts.length - 1].id + 1,
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    date: isoString
+  });
+
+  res.json(posts[posts.length - 1]);
+});
 
 //CHALLENGE 4: PATCH a post when you just want to update one parameter
+app.patch("/posts/:id", (req, res) => {
+  const now = new Date();
+  const isoString = now.toISOString();
+
+  const index = posts.findIndex((p) => p.id === parseInt(req.params.id));
+
+  let updatedPost = {
+    id: parseInt(req.params.id),
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    date: isoString,
+  };
+
+  posts[index] = updatedPost;
+  res.json(posts[index]);
+});
 
 //CHALLENGE 5: DELETE a specific post by providing the post id.
+app.delete("/posts/:id" , (req, res) => {
+  const index = posts.findIndex((p) => p.id === parseInt(req.params.id));
+
+  posts.splice(index, 1);
+  res.json(posts);
+});
 
 app.listen(port, () => {
   console.log(`API is running at http://localhost:${port}`);
