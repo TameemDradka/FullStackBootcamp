@@ -1,9 +1,9 @@
-function Note() {
+function Note({ title, body }) {
     return(
         <>
             <div className="note">
-                <h1>This is the title</h1>
-                <p>This is the content</p>
+                <h1>{title}</h1>
+                <p>{body}</p>
             </div>
         </>
     );
